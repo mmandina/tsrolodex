@@ -1,17 +1,17 @@
-import React, { ChangeEvent } from 'react';
-import logo from './logo.svg';
+import React, { ChangeEvent, ReactNode } from 'react';
 import './App.css';
 import { Component } from 'react';
-import { serialize } from 'v8';
-
+import Cardlist from './components/card-list/card-list.component';
+import SearchBox from './components/search-box/search-box.component';
 interface MyState {
   monsters: Monster[];
   searchString: string;
 }
 interface MyProps {}
-interface Monster {
+export interface Monster {
   name: string;
   id: number;
+  email: string;
 }
 class App extends Component<MyProps, MyState> {
   constructor(props: MyProps) {
@@ -20,7 +20,6 @@ class App extends Component<MyProps, MyState> {
       monsters: [],
       searchString: '',
     };
-    console.log('constructor');
   }
 
   componentDidMount() {
@@ -31,7 +30,6 @@ class App extends Component<MyProps, MyState> {
           return { monsters: users };
         })
       );
-    console.log('ComponentDidMount');
   }
   onSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const searchString = event.target.value.toLowerCase();
@@ -39,8 +37,7 @@ class App extends Component<MyProps, MyState> {
       return { searchString: searchString };
     });
   };
-  render() {
-    console.log('render');
+  render(): ReactNode {
     const { monsters, searchString } = this.state;
     const { onSearchChange } = this;
     const filteredMonsters = monsters.filter((ele) => {
@@ -48,17 +45,14 @@ class App extends Component<MyProps, MyState> {
     });
     return (
       <div className='App'>
-        <input
-          className='search-box'
-          type='search'
+        <h1 className='app-title'> TypeScript Monster Rolodex</h1>
+        <SearchBox
+          className='monster-search-box'
+          onChangeHandler={onSearchChange}
           placeholder='search monsters'
-          onChange={onSearchChange}
         />
-        {filteredMonsters.map((monster) => (
-          <div key={monster.id}>
-            <h1>{monster.name}</h1>
-          </div>
-        ))}
+
+        <Cardlist monsters={filteredMonsters} />
       </div>
     );
   }
