@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { Component } from 'react';
@@ -33,10 +33,18 @@ class App extends Component<MyProps, MyState> {
       );
     console.log('ComponentDidMount');
   }
+  onSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const searchString = event.target.value.toLowerCase();
+    this.setState(() => {
+      return { searchString: searchString };
+    });
+  };
   render() {
     console.log('render');
-    const filteredMonsters = this.state.monsters.filter((ele) => {
-      return ele.name.toLowerCase().includes(this.state.searchString);
+    const { monsters, searchString } = this.state;
+    const { onSearchChange } = this;
+    const filteredMonsters = monsters.filter((ele) => {
+      return ele.name.toLowerCase().includes(searchString);
     });
     return (
       <div className='App'>
@@ -44,12 +52,7 @@ class App extends Component<MyProps, MyState> {
           className='search-box'
           type='search'
           placeholder='search monsters'
-          onChange={(event) => {
-            const searchString = event.target.value.toLowerCase();
-            this.setState(() => {
-              return { searchString: searchString };
-            });
-          }}
+          onChange={onSearchChange}
         />
         {filteredMonsters.map((monster) => (
           <div key={monster.id}>
