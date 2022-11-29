@@ -11,7 +11,7 @@ class Card extends Component<Props> {
     return (
       <div className='card-container'>
         <img
-          src={`https://robohash.org/${id}?set=set2`}
+          src={`https://robohash.org/${id}?set=set2&size=180x180`}
           alt={`monster ${name}`}
         />
         <h2>{name}</h2>
